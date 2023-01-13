@@ -19,6 +19,8 @@ client.on(Events.ClientReady, guild => {
 
 //When a message is reacted, add the role
 client.on(Events.MessageReactionAdd, async (reaction, user) => {
+
+	//not super sure what this chunk is
 	// When a reaction is received, check if the structure is partial
 	if (reaction.partial) {
 		// If the message this reaction belongs to was removed, the fetching might result in an API error which should be handled
@@ -31,11 +33,27 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
 		}
 	}
 	
+	// get user who reacted
+	const reactUser = await reaction.message.guild.members.fetch(user);
+
+	//Roles
 	const MUSA = reaction.message.guild.roles.cache.find(role => role.name === "MUSA");
 	const MCP = reaction.message.guild.roles.cache.find(role => role.name === "MCP");
-	const reactUser = await reaction.message.guild.members.fetch(user);
+	const cpln502 = reaction.message.guild.roles.cache.find(role => role.name === "502");
+	const cpln504 = reaction.message.guild.roles.cache.find(role => role.name === "504");
+	const cpln505 = reaction.message.guild.roles.cache.find(role => role.name === "505");
+	const cpln506 = reaction.message.guild.roles.cache.find(role => role.name === "506");
+	const cpln528 = reaction.message.guild.roles.cache.find(role => role.name === "528");
+	const cpln531 = reaction.message.guild.roles.cache.find(role => role.name === "531");
+	const cpln560 = reaction.message.guild.roles.cache.find(role => role.name === "560");
+	const cpln571 = reaction.message.guild.roles.cache.find(role => role.name === "571");
+	const cpln577 = reaction.message.guild.roles.cache.find(role => role.name === "577");
+
+
+
+
 	
-	if (reaction.message.content === 'MUSA or MCP') {
+	if (reaction.message.content === 'Program?') {
 		//console.log('member ' +reaction.message.member);
 		console.log('user ' +reactUser);
 
@@ -47,26 +65,43 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
 			reactUser.roles.add(MCP).catch(console.error);
 		}
 	}
+
+	if (reaction.message.content === 'CPLN 502') {
+		console.log(reactUser.name + 'has entered 502');
+
+		if (reaction.emoji.name == "") {
+			reactUser.roles.add(MUSA).catch(console.error);
+
+		}
+		if (reaction.emoji.name == "🏙️") {
+			reactUser.roles.add(MCP).catch(console.error);
+		}
+	}
+
+
 });
 
 
 //When a message is unreacted, remove the role
 client.on(Events.MessageReactionRemove, async (reaction, user) => {
-	// When a reaction is received, check if the structure is partial
+
+
 	if (reaction.partial) {
-		// If the message this reaction belongs to was removed, the fetching might result in an API error which should be handled
 		try {
 			await reaction.fetch();
 		} catch (error) {
 			console.error('Something went wrong when fetching the message:', error);
-			// Return as `reaction.message.author` may be undefined/null
 			return;
 		}
 	}
-	
+
+	// get user who reacted
+	const reactUser = await reaction.message.guild.members.fetch(user);
+
+	//Roles
 	const MUSA = reaction.message.guild.roles.cache.find(role => role.name === "MUSA");
 	const MCP = reaction.message.guild.roles.cache.find(role => role.name === "MCP");
-	const reactUser = await reaction.message.guild.members.fetch(user);
+	
 
 	
 	if (reaction.message.content === 'MUSA or MCP') {
