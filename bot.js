@@ -17,6 +17,10 @@ client.on(Events.ClientReady, guild => {
 });
 
 
+//perhaps attach to google sheet
+const classArray = ["502","504","505","506","528","531","560","571","577"]
+
+
 //When a message is reacted, add the role
 client.on(Events.MessageReactionAdd, async (reaction, user) => {
 
@@ -39,21 +43,13 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
 	//Roles
 	const MUSA = reaction.message.guild.roles.cache.find(role => role.name === "MUSA");
 	const MCP = reaction.message.guild.roles.cache.find(role => role.name === "MCP");
-	const cpln502 = reaction.message.guild.roles.cache.find(role => role.name === "502");
-	const cpln504 = reaction.message.guild.roles.cache.find(role => role.name === "504");
-	const cpln505 = reaction.message.guild.roles.cache.find(role => role.name === "505");
-	const cpln506 = reaction.message.guild.roles.cache.find(role => role.name === "506");
-	const cpln528 = reaction.message.guild.roles.cache.find(role => role.name === "528");
-	const cpln531 = reaction.message.guild.roles.cache.find(role => role.name === "531");
-	const cpln560 = reaction.message.guild.roles.cache.find(role => role.name === "560");
-	const cpln571 = reaction.message.guild.roles.cache.find(role => role.name === "571");
-	const cpln577 = reaction.message.guild.roles.cache.find(role => role.name === "577");
 
-
+	const courseArray = classArray.map(course => reaction.message.guild.roles.cache.find(role => role.name === course));
 
 
 	
-	if (reaction.message.content === 'Program?') {
+	
+	if (reaction.message.content === 'Program?' || reaction.message.content === 'MUSA or MCP') {
 		//console.log('member ' +reaction.message.member);
 		console.log('user ' +reactUser);
 
@@ -66,17 +62,12 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
 		}
 	}
 
-	if (reaction.message.content === 'CPLN 502') {
-		console.log(reactUser.name + 'has entered 502');
-
-		if (reaction.emoji.name == "") {
-			reactUser.roles.add(MUSA).catch(console.error);
-
+	courseArray.forEach(course => {
+		if (reaction.message.content === `CPLN ${course.name}`) {
+			console.log(reactUser.name + `has entered CPLN ${course.name}`);
+			reactUser.roles.add(course).catch(console.error);
 		}
-		if (reaction.emoji.name == "🏙️") {
-			reactUser.roles.add(MCP).catch(console.error);
-		}
-	}
+	});
 
 
 });
